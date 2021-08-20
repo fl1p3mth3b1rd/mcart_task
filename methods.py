@@ -3,6 +3,7 @@ import requests
 from datetime import datetime
 
 def get_xml(url):
+    # получение xml файла по url
     try:
         list_of_curriencies_xml = requests.get(url)
         list_of_curriencies_xml.raise_for_status()
@@ -12,6 +13,7 @@ def get_xml(url):
         return False
 
 def get_curriencies():
+    # получение списка валют
     url = "http://www.cbr.ru/scripts/XML_valFull.asp"
     if get_xml(url):
         list_of_curriencies_xml = get_xml(url)
@@ -22,6 +24,7 @@ def get_curriencies():
         return curriencies
 
 def get_exchange_rate(char_code, first_date, second_date):
+    # получение информации о курсе валюты (char_code) относительно рубля по заданным датам (first_date, second_date) и разность между полученными значениями
     try:
         first_date = datetime.strptime(first_date, "%Y.%m.%d")
         first_date = datetime.strftime(first_date, "%d/%m/%Y")
@@ -52,5 +55,3 @@ def get_exchange_rate(char_code, first_date, second_date):
             return f"Валюта {char_code} не найдена"
         difference = abs(first_date_exchange_rate - second_date_exchange_rate)
         return f"""Курс RUB относительно {char_code} на {first_date} составляет {first_date_exchange_rate}\nКурс RUB относительно {char_code} на {second_date} составляет {second_date_exchange_rate}\nРазность составила {round(difference, 3)}"""
-
-# print(get_echange_rate("GBP", "2021.08.19", "2021.08.20"))
